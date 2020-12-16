@@ -43,5 +43,19 @@ module.exports = {
       let d = new Date(str)
       return dateFormat('YYYY-mm-dd HH:MM:SS', d)
     }
+  },
+  returnObj(data) {
+    if (data) {
+      return {
+        code: 0,
+        msg: 'success',
+        data: data
+      }
+    } else {
+      return {
+        code: 1,
+        msg: 'fail'
+      }
+    }
   }
 }

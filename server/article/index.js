@@ -1,5 +1,8 @@
 const db = require('./../db')
 
+const utils = require('./../utils')
+const tools = require('./../tools')
+
 const dbTable = 'article'
 
 const where = ' where 1=1 '
@@ -45,22 +48,32 @@ const articleDetailSQL = function (params) {
   }
 }
 
+// 新建文章
+const articleAddSQL = function (params) {
+  let sql = `insert into ${dbTable} (title, content) values(?,?) `
+  let sqlParams = []
+
+  sqlParams.push(params.title)
+  sqlParams.push(params.content)
+
+  return {
+    sql, sqlParams
+  }
+}
+
 
 module.exports = {
   async articleList(params, getObj) {
     let data = await db.query(articleListSQL(params), getObj)
-    return {
-      code: 0,
-      msg: 'success',
-      data: data
-    }
+    return utils.returnObj(data)
   },
   async articleDetail(params, getObj) {
     let data = await db.query(articleDetailSQL(params), getObj)
-    return {
-      code: 0,
-      msg: 'success',
-      data: data
-    }
+    return utils.returnObj(data)
+  },
+  async articleAdd(params, getObj) {
+    await db.query(articleAddSQL(params), getObj)
+    let max = await tools.getMaxId(dbTable, params)
+    return utils.returnObj(max)
   }
 }
