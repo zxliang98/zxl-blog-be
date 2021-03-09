@@ -16,8 +16,14 @@ router.get('/article-detail', async (req, res, next) => {
 })
 
 // 添加文章 articleAdd
-router.post('/article-add', async (req, res, next) => {
+router.post('/article', async (req, res, next) => {
   let data = await articleManage.articleAdd(req.body)
+  res.send(data)
+})
+
+// 添加文章 articleDelete
+router.delete('/article', async (req, res, next) => {
+  let data = await articleManage.articleDelete(req.body)
   res.send(data)
 })
 

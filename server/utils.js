@@ -1,12 +1,12 @@
 const dateFormat = function (fmt, date) {
   let ret
   const opt = {
-    "Y+": date.getFullYear().toString(),        // 年
-    "m+": (date.getMonth() + 1).toString(),     // 月
-    "d+": date.getDate().toString(),            // 日
-    "H+": date.getHours().toString(),           // 时
-    "M+": date.getMinutes().toString(),         // 分
-    "S+": date.getSeconds().toString()          // 秒
+    "Y+": date.getFullYear().toString(), // 年
+    "m+": (date.getMonth() + 1).toString(), // 月
+    "d+": date.getDate().toString(), // 日
+    "H+": date.getHours().toString(), // 时
+    "M+": date.getMinutes().toString(), // 分
+    "S+": date.getSeconds().toString() // 秒
     // 有其他格式化字符需求可以继续添加，必须转化成字符串
   }
   for (let k in opt) {
@@ -44,12 +44,21 @@ module.exports = {
       return dateFormat('YYYY-mm-dd HH:MM:SS', d)
     }
   },
-  returnObj(data) {
+  returnObj(data, num) {
     if (data) {
-      return {
-        code: 0,
-        msg: 'success',
-        data: data
+      if (num) {
+        return {
+          code: 0,
+          msg: 'success',
+          data: data,
+          num: num
+        }
+      } else {
+        return {
+          code: 0,
+          msg: 'success',
+          data: data,
+        }
       }
     } else {
       return {
