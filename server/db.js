@@ -4,12 +4,14 @@ const util = require('./utils')
 const conf = {
   host: 'localhost',
   user: 'root',
-  password: 'root',
-  database: 'blogdb',
+  password: 'Zhao0331.',
+  database: 'zxlmysql',
   port: '3306',
   multipleStatements: true    // 多语句查询
 }
 const pool = mysql.createPool(conf)
+
+// console.log(pool);
 
 module.exports = {
   query(input, getObj) {
