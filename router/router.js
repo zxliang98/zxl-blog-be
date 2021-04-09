@@ -11,7 +11,7 @@ router.get('/article-list', async (req, res, next) => {
 })
 
 // 获取单个文章 articleDetail
-router.get('/article-detail', async (req, res, next) => {
+router.get('/article', async (req, res, next) => {
   let data = await articleManage.articleDetail(req.query, true)
   res.send(data)
 })
@@ -19,6 +19,12 @@ router.get('/article-detail', async (req, res, next) => {
 // 添加文章 articleAdd
 router.post('/article', async (req, res, next) => {
   let data = await articleManage.articleAdd(req.body)
+  res.send(data)
+})
+
+// 添加文章 articleAdd
+router.put('/article', async (req, res, next) => {
+  let data = await articleManage.articleEdit(req.body)
   res.send(data)
 })
 

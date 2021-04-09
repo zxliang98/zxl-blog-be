@@ -12,10 +12,10 @@ const articleListSQL = function (params) {
   let sql = `select * from ${dbTable} ${where} `
   let sqlParams = []
 
-  // if (params.type) {
-  //   sql += 'AND type = ? '
-  //   sqlParams.push(params.type)
-  // }
+  if (params.catalog) {
+    sql += 'AND catalog_id = ? '
+    sqlParams.push(params.catalog)
+  }
   // if (params.state) {
   //   sql += 'AND state = ? '
   //   sqlParams.push(params.state)
@@ -52,11 +52,42 @@ const articleDetailSQL = function (params) {
 
 // 新建文章
 const articleAddSQL = function (params) {
-  let sql = `insert into ${dbTable} (title, content) values(?,?) `
+  let sql = `insert into ${dbTable} (title, content, pub_time, pub_user, catalog_id) values(?,?,?,?,?) `
   let sqlParams = []
 
   sqlParams.push(params.title)
   sqlParams.push(params.content)
+  sqlParams.push(Date.now())
+  sqlParams.push(params.name)
+  sqlParams.push(params.catalog)
+
+  return {
+    sql,
+    sqlParams
+  }
+}
+
+// 编辑文章
+const articleEditSQL = function (params) {
+  // let sql = `insert into ${dbTable} (title, content, pub_time, pub_user, catalog_id) values(?,?,?,?,?) `
+  let sql = `update ${dbTable} set `
+  let sqlParams = []
+  if (params.title) {
+    sql += `title = ?,`
+    sqlParams.push(params.title)
+  }
+  if (params.content) {
+    sql += `content = ?,`
+    sqlParams.push(params.content)
+  }
+  if (params.catalog) {
+    sql += `catalog_id = ?`
+    sqlParams.push(params.catalog)
+  }
+
+  sql += where
+  sql += 'AND id = ? '
+  sqlParams.push(params.id - 0)
 
   return {
     sql,
@@ -78,7 +109,6 @@ const articleDeleteSQL = function (params) {
   }
 }
 
-
 module.exports = {
   async articleList(params, getObj) {
     let data = await db.query(articleListSQL(params), getObj)
@@ -94,14 +124,17 @@ module.exports = {
     let max = await tools.getMaxId(dbTable, params)
     return utils.returnObj(max)
   },
+  async articleEdit(params, getObj) {
+    await db.query(articleEditSQL(params), getObj)
+    return utils.returnObj(params.id)
+  },
   async articleDelete(params, getObj) {
     try {
-
       let data = await db.query(articleDeleteSQL(params), getObj)
       let count = await tools.getCount(dbTable, params)
       return utils.returnObj(count)
     } catch (error) {
-      console.log(error);
+      console.log(error)
       return utils.returnObj()
     }
   }
